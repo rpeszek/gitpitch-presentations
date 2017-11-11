@@ -12,7 +12,7 @@ _Rich Hickley_
 ---
 #### Stack overflow in Haskell
 
-- very low level stuff
+- very low level stuff (pun)
 - do not know much about it 
 - want to learn from You
 
