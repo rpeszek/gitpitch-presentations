@@ -1,3 +1,3 @@
 ## Presentations
 
----?include=boulder-haskell-meetup/2017-11-eta/PITCHME.md
+---?include=bhm-2017-11/PITCHME.md
