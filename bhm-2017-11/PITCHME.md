@@ -1,10 +1,15 @@
 #### JVM, Recursion, and Eta
 
 Robert Peszek, 2017-11
+
+---
+![GHC growing Tree](assets/image/ghc-tree.png)
+
 ---
 #### JVM and Recursion
 
 - Bytecode has no TCO instruction
+- poor JIT
 - [Functional Programming is terrible youtube](https://www.youtube.com/watch?v=hzf3hTUKk8U&t=346s)
 - Iterop, Performance, Control Flow - pick any two  
 _Rich Hickley_
@@ -25,16 +30,14 @@ _Rich Hickley_
   - just add lotsa ! :)
 
 ---
-![GHC growing Tree](assets/image/ghc-tree.png)
-
----
 #### About Eta
 
 - http://eta-lang.org 
-- v0.1 Developer Preview
+- v0.1 Developer Preview 
+- work-in-progress
 - implementation is changing (and not documented yet)
-- recursion behavior: 
-   - seems Eta ~ Haskell 
+- observed recursion behavior: 
+   - seems Eta ~ Haskell
    - more space leak sensitive
 
 ---
@@ -63,8 +66,10 @@ myMap :: (a -> b) -> [a] -> [b]
 myMap _ [] = []
 myMap f (x:xs) = f x : myMap f xs
 
-bigSum = sum $ myMap (^2) [1..1000000] -- works!
+-- works! with heavy space use
+bigSum = sum $ myMap (^2) [1..1000000] 
 ```
+Note: I seem to remember this being called Wadler benchmark
 
 ---
 #### Example 1b. Scala 
@@ -85,7 +90,7 @@ object Recursion {
 ```
 
 ---
-#### Code Example 1b. Eta 
+#### Example 1b. Eta 
 Just so we do not look at Scala
 ```Haskell
 myMapAux :: [b] -> (a -> b) -> [a]  -> [b]
@@ -97,8 +102,20 @@ myMap' = myMapAux []
 
 bigSum' = foldl' (+) 0 $ myMap' (^2) [1..1000000]
 ```
+
 ---
-#### Code Example 2. Eta
+#### Example 1c. with Vector
+(Highly lambda optimized, Notice 100x bigger)
+```Haskell
+import qualified Data.Vector as V
+
+sq x = x * x
+-- | blasting fast in GHC, OutOfMemory in Eta 
+bigSumVec = V.sum $ V.map sq $ V.enumFromTo  1 (100000000 :: Int64)
+```
+
+---
+#### Example 2. Eta
 ```Haskell
 isEven :: Integer -> Bool
 isEven 0 = True
@@ -111,13 +128,13 @@ isOdd i = isEven $ i - 1
 evenMM = isEven 1000000  -- Works!!
 ```
 ---
-#### Code Example 2. Scala
+#### Example 2. Scala
 ```Scala
   // Forget it 
   // @tailrec does not work on mutually recursive code
 ```
 ---
-#### Code Example 3. Eta
+#### Example 3. Eta
 ```Haskell
 mean :: [Double] -> Double
 mean xs = s / fromIntegral n
@@ -129,7 +146,7 @@ mean xs = s / fromIntegral n
 bigMean = mean [1..10000000] 
 ```
 ---
-#### Code Example 3. Eta
+#### Example 3. Eta
 ```Haskell
 mean' :: [Double] -> Double
 mean' xs = s / fromIntegral n
