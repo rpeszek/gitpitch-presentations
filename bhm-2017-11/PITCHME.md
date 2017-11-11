@@ -5,7 +5,7 @@ Robert Peszek, 2017-11
 #### JVM and Recursion
 
 - Bytecode has no TCO instruction
-- [Fuctional Programming is terrible youtube](https://www.youtube.com/watch?v=hzf3hTUKk8U&t=346s)
+- [Functional Programming is terrible youtube](https://www.youtube.com/watch?v=hzf3hTUKk8U&t=346s)
 - Iterop, Performance, Control Flow - pick any two  
 _Rich Hickley_
 
