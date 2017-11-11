@@ -2,7 +2,8 @@
 
 Robert Peszek, 2017-11
 ---
-#### JVM and Recursion
+JVM and Recursion
+-----------------
 - Bytecode has no TCO instruction
 - [Fuctional Programming is terrible youtube](https://www.youtube.com/watch?v=hzf3hTUKk8U&t=346s)
 - Iterop, Performance, Control Flow - pick any two  
@@ -30,7 +31,7 @@ _Rich Hickley_
 - v0.1 Developer Preview
 - implementation is changing (and not documented yet)
 - recursion behavior: 
-   - seems ~ Haskell 
+   - seems Eta ~ Haskell 
    - more space leak sensitive
 
 ---
