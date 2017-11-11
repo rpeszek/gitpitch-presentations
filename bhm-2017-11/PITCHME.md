@@ -2,8 +2,8 @@
 
 Robert Peszek, 2017-11
 ---
-JVM and Recursion
------------------
+#### JVM and Recursion
+
 - Bytecode has no TCO instruction
 - [Fuctional Programming is terrible youtube](https://www.youtube.com/watch?v=hzf3hTUKk8U&t=346s)
 - Iterop, Performance, Control Flow - pick any two  
@@ -11,12 +11,14 @@ _Rich Hickley_
 
 ---
 #### Stack overflow in Haskell
+
 - very low level stuff
 - do not know much about it 
 - want to learn from You
 
 ---
 #### Stack overflow in Haskell
+
 - laziness changes everything 
 - very different (~ opposite to Java/Scala/etc)
   - guarded recursion
@@ -27,6 +29,7 @@ _Rich Hickley_
 
 ---
 #### About Eta
+
 - http://eta-lang.org 
 - v0.1 Developer Preview
 - implementation is changing (and not documented yet)
