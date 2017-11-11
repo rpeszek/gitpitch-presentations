@@ -2,20 +2,20 @@
 
 Robert Peszek, 2017-11
 ---
-### JVM and Recursion
+# JVM and Recursion
 - Bytecode has no TCO instruction
-- [Fuctional Programming is terrible](https://www.youtube.com/watch?v=hzf3hTUKk8U&t=346s)
+- [Fuctional Programming is terrible youtube](https://www.youtube.com/watch?v=hzf3hTUKk8U&t=346s)
 - Iterop, Performance, Control Flow - pick any two  
 _Rich Hickley_
 
 ---
-### Recursion and Stack overflow in Haskell
+# Stack overflow in Haskell
 - very low level stuff
 - do not know much about it 
 - want to learn from You
 
 ---
-### Recursion and Stack overflow in Haskell
+## Stack overflow in Haskell
 - laziness changes everything 
 - very different (~ opposite to Java/Scala/etc)
   - guarded recursion
@@ -25,7 +25,7 @@ _Rich Hickley_
 ![GHC growing Tree](assets/image/ghc-tree.png)
 
 ---
-### About Eta
+# About Eta
 - http://eta-lang.org 
 - v0.1 Developer Preview
 - implementation is changing (and not documented yet)
@@ -34,11 +34,11 @@ _Rich Hickley_
    - more space leak sensitive
 
 ---
-### Naive examples
+# Naive code examples
 
 
 ---
-### Code Example 1. Scala
+# Example 1. Scala
 (Note not Tail Recursive!):
 ```Scala
 object Recursion {
@@ -53,7 +53,7 @@ object Recursion {
 ```
 
 ---
-### Code Example 1. Eta
+# Example 1. Eta
 ```Haskell
 myMap :: (a -> b) -> [a] -> [b]
 myMap _ [] = []
@@ -63,7 +63,7 @@ bigSum = sum $ myMap (^2) [1..1000000] -- works!
 ```
 
 ---
-### Code Example 1b. Scala 
+# Example 1b. Scala 
 ```Scala
 object Recursion {
   @tailrec
@@ -81,7 +81,7 @@ object Recursion {
 ```
 
 ---
-### Code Example 1b. Eta 
+# Code Example 1b. Eta 
 Just so we do not look at Scala
 ```Haskell
 myMapAux :: [b] -> (a -> b) -> [a]  -> [b]
@@ -94,7 +94,7 @@ myMap' = myMapAux []
 bigSum' = foldl' (+) 0 $ myMap' (^2) [1..1000000]
 ```
 ---
-### Code Example 2. Eta
+# Code Example 2. Eta
 ```Haskell
 isEven :: Integer -> Bool
 isEven 0 = True
@@ -107,13 +107,13 @@ isOdd i = isEven $ i - 1
 evenMM = isEven 1000000  -- Works!!
 ```
 ---
-### Code Example 2. Scala
+# Code Example 2. Scala
 ```Scala
   // Forget it 
   // @tailrec does not work on mutually recursive code
 ```
 ---
-### Code Example 3. Eta
+# Code Example 3. Eta
 ```Haskell
 mean :: [Double] -> Double
 mean xs = s / fromIntegral n
@@ -124,8 +124,8 @@ mean xs = s / fromIntegral n
 -- | Both GHC and Eta stack overflow
 bigMean = mean [1..10000000] 
 ```
-
-### Code Example 3. Eta
+---
+# Code Example 3. Eta
 ```Haskell
 mean' :: [Double] -> Double
 mean' xs = s / fromIntegral n
