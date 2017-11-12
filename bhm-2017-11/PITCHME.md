@@ -6,11 +6,23 @@ Robert Peszek, 2017-11
 ![GHC growing Tree](assets/image/ghc-tree.png)
 
 ---
+#### About Eta
+
+- http://eta-lang.org 
+- v0.1 Developer Preview 
+- implementation is changing (not documented yet)
+- observed recursion behavior: 
+   - seems Eta ~ Haskell (*)
+   - more space leak sensitive   
+
+Note: seems like Eta leaks space faster but Stack/Heap use patterns seem the same
+
+---
 #### JVM and Recursion
 
-- Bytecode has no TCO instruction
+- JVM bytecode has no TCO instruction
 - poor JIT
-- [Functional Programming is terrible youtube](https://www.youtube.com/watch?v=hzf3hTUKk8U&t=346s)
+- Youtube [Functional Programming is terrible](https://www.youtube.com/watch?v=hzf3hTUKk8U&t=346s)
 - Iterop, Performance, Control Flow - pick any two  
 _Rich Hickley_
 
@@ -26,26 +38,43 @@ _Rich Hickley_
 
 - laziness changes everything 
 - very different (~ opposite to Java/Scala/etc)
+  - caused by deeply nested thunks
   - guarded recursion
   - just add lotsa ! :)
 
 ---
-#### About Eta
-
-- http://eta-lang.org 
-- v0.1 Developer Preview 
-- work-in-progress
-- implementation is changing (and not documented yet)
-- observed recursion behavior: 
-   - seems Eta ~ Haskell
-   - more space leak sensitive
-
----
 #### Naive code examples
 
+---
+#### Example 1: Mean. Eta (*)
+```Haskell
+mean :: [Double] -> Double
+mean xs = s / fromIntegral n
+  where
+    (n, s)     = foldl k (0, 0) xs
+    k (n, s) x = (n+1, s+x)
+
+-- | Both GHC and Eta stack overflow
+bigMean = mean [1..10000000] 
+```
+
+Note: example from Real World Haskell
 
 ---
-#### Example 1. Scala
+#### Example 1: Mean. Eta
+```Haskell
+mean' :: [Double] -> Double
+mean' xs = s / fromIntegral n
+  where
+    (n, s)       = foldl' k (0, 0) xs
+    k (!n, !s) x = (n+1, s+x)
+
+-- | Both GHC and Eta work
+bigMean' = mean' [1..10000000]
+```
+
+---
+#### Example 2: Sum of squares. Scala
 (Note not Tail Recursive!):
 ```Scala
 object Recursion {
@@ -60,7 +89,7 @@ object Recursion {
 ```
 
 ---
-#### Example 1. Eta
+#### Example 2: Sum of squares. Eta (*)
 ```Haskell
 myMap :: (a -> b) -> [a] -> [b]
 myMap _ [] = []
@@ -69,10 +98,10 @@ myMap f (x:xs) = f x : myMap f xs
 -- works! with heavy space use
 bigSum = sum $ myMap (^2) [1..1000000] 
 ```
-Note: I seem to remember this being called Wadler benchmark
+Note: I seem to remember that this benchmark has something to do with Wadler
 
 ---
-#### Example 1b. Scala 
+#### Example 2b: Sum of squares TC. Scala 
 ```Scala
 object Recursion {
   @tailrec
@@ -90,7 +119,7 @@ object Recursion {
 ```
 
 ---
-#### Example 1b. Eta 
+#### Example 2b: Sum of squares TC. Eta 
 Just so we do not look at Scala
 ```Haskell
 myMapAux :: [b] -> (a -> b) -> [a]  -> [b]
@@ -100,22 +129,24 @@ myMapAux acc f (x:xs) = myMapAux ((f x) : acc) f xs
 myMap' :: (a -> b) -> [a] -> [b]
 myMap' = myMapAux []
 
-bigSum' = foldl' (+) 0 $ myMap' (^2) [1..1000000]
+bigSum' = sum $ myMap' (^2) [1..1000000]
 ```
 
 ---
-#### Example 1c. with Vector
+#### Example 2c: Sum of squares with Vector. Eta
 (Highly lambda optimized, Notice 100x bigger)
 ```Haskell
 import qualified Data.Vector as V
 
 sq x = x * x
--- | blasting fast in GHC, OutOfMemory in Eta 
-bigSumVec = V.sum $ V.map sq $ V.enumFromTo  1 (100000000 :: Int64)
+-- | blasting fast small space in GHC
+--   OutOfMemory in Eta 
+bigSumVec = let xs = V.enumFromTo  (100000000 :: Int64)
+            in V.sum $ V.map sq $ xs
 ```
 
 ---
-#### Example 2. Eta
+#### Example 3: Mutual Recursion. Eta
 ```Haskell
 isEven :: Integer -> Bool
 isEven 0 = True
@@ -128,32 +159,8 @@ isOdd i = isEven $ i - 1
 evenMM = isEven 1000000  -- Works!!
 ```
 ---
-#### Example 2. Scala
+#### Example 3: Mutual Recursion. Scala
 ```Scala
   // Forget it 
   // @tailrec does not work on mutually recursive code
-```
----
-#### Example 3. Eta
-```Haskell
-mean :: [Double] -> Double
-mean xs = s / fromIntegral n
-  where
-    (n, s)     = foldl k (0, 0) xs
-    k (n, s) x = (n+1, s+x)
-
--- | Both GHC and Eta stack overflow
-bigMean = mean [1..10000000] 
-```
----
-#### Example 3. Eta
-```Haskell
-mean' :: [Double] -> Double
-mean' xs = s / fromIntegral n
-  where
-    (n, s)       = foldl' k (0, 0) xs
-    k (!n, !s) x = (n+1, s+x)
-
--- | Neither GHC nor Eta stack overflows
-bigMean' = mean' [1..100000000]
 ```
