@@ -61,7 +61,7 @@ bigMean = mean [1..10000000]
 Note: example from Real World Haskell
 
 ---
-#### Example 1: Mean. Eta
+#### Example 1: Mean. Eta (*)
 ```Haskell
 mean' :: [Double] -> Double
 mean' xs = s / fromIntegral n
@@ -72,9 +72,11 @@ mean' xs = s / fromIntegral n
 -- | Both GHC and Eta work
 bigMean' = mean' [1..10000000]
 ```
+Note: stack overflow if fixed by using strict evaluation
+foldl' on its own will not fix it
 
 ---
-#### Example 2: Sum of squares. Scala
+#### Example 2: Sum of squares. Scala (*)
 (Note not Tail Recursive!):
 ```Scala
 object Recursion {
@@ -87,6 +89,7 @@ object Recursion {
   lazy val bigsum = myMap[Int, Long](sq, List.range(1,100000)).sum  
 }
 ```
+Note: I seem to remember that this benchmark has something to do with Wadler
 
 ---
 #### Example 2: Sum of squares. Eta (*)
@@ -98,7 +101,7 @@ myMap f (x:xs) = f x : myMap f xs
 -- works! with heavy space use
 bigSum = sum $ myMap (^2) [1..1000000] 
 ```
-Note: I seem to remember that this benchmark has something to do with Wadler
+Note: using myMap to avoid built-in optimizations. I have tried controlling implementation of sum as well.
 
 ---
 #### Example 2b: Sum of squares TC. Scala 
@@ -139,7 +142,7 @@ bigSum' = sum $ myMap' (^2) [1..1000000]
 import qualified Data.Vector as V
 
 sq x = x * x
--- | blasting fast small space in GHC
+-- | blasting fast, small space in GHC
 --   OutOfMemory in Eta 
 bigSumVec = let xs = V.enumFromTo  (100000000 :: Int64)
             in V.sum $ V.map sq $ xs
@@ -164,3 +167,9 @@ evenMM = isEven 1000000  -- Works!!
   // Forget it 
   // @tailrec does not work on mutually recursive code
 ```
+
+---
+#### Some References
+- http://eta-lang.org 
+- http://book.realworldhaskell.org/read/profiling-and-optimization.html
+- https://www.well-typed.com/blog/2014/05/understanding-the-stack/
