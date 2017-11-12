@@ -103,6 +103,7 @@ myMap f (x:xs) = f x : myMap f xs
 bigSum = sum $ myMap (^2) [1..1000000] 
 ```
 Note: using myMap to avoid built-in optimizations. I have tried controlling implementation of sum as well.
+In GHC this costs 270MB/40ms, Eta is slower and I did not profile space use. Eta will OutOfMemory error at 10x the size.
 
 ---
 #### Example 2b: Sum of squares TC. Scala 
@@ -123,7 +124,7 @@ object Recursion {
 ```
 
 ---
-#### Example 2b: Sum of squares TC. Eta 
+#### Example 2b: Sum of squares TC. Eta (*)
 Just so we do not look at Scala
 ```Haskell
 myMapAux :: [b] -> (a -> b) -> [a]  -> [b]
@@ -135,6 +136,7 @@ myMap' = myMapAux []
 
 bigSum' = sum $ myMap' (^2) [1..1000000]
 ```
+Note: this slide is so we do not look at Scala. This code change benefits Scala but not Haskell/Eta.
 
 ---
 #### Example 2c: Sum of squares with Vector. Eta
@@ -162,6 +164,7 @@ isOdd i = isEven $ i - 1
 
 evenMM = isEven 1000000  -- Works!!
 ```
+
 ---
 #### Example 3: Mutual Recursion. Scala
 ```Scala
