@@ -63,6 +63,7 @@ Note: example from Real World Haskell
 ---
 #### Example 1: Mean. Eta (*)
 ```Haskell
+{-# LANGUAGE BangPatterns #-}
 mean' :: [Double] -> Double
 mean' xs = s / fromIntegral n
   where
