@@ -150,6 +150,9 @@ sq x = x * x
 bigSumVec = let xs = V.enumFromTo  (100000000 :: Int64)
             in V.sum $ V.map sq $ xs
 ```
+Note: Core rewrite rules reduce this to recursive loop!
+See LambdaConf2017 presentation
+https://github.com/ryanorendorff/lc-2017-fusion 
 
 ---
 #### Example 3: Mutual Recursion. Eta
