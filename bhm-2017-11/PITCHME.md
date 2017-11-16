@@ -16,6 +16,8 @@ Robert Peszek, 2017-11
    - more space leak sensitive   
 
 Note: seems like Eta leaks space faster but Stack/Heap use patterns seem the same
+About project: Rahul Muttineni, Edward Kmett early sponsorship, 
+lots of activity (including Brian McKenna)
 
 ---
 #### JVM and Recursion
