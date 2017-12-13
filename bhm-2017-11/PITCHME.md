@@ -9,7 +9,7 @@ Robert Peszek, 2017-11
 #### About Eta
 
 - http://eta-lang.org 
-- v0.1 Developer Preview 
+- v0.0.9b6 Developer Preview 
 - implementation is changing (not documented yet)
 - observed recursion behavior: 
    - seems Eta ~ Haskell (*)
@@ -179,6 +179,8 @@ evenMM = isEven 1000000  -- Works!!
 
 ---
 #### Some References
-- http://eta-lang.org 
+- http://eta-lang.org
+- https://youtu.be/CscBSNF6qnE (Rahul Muttineni talks) 
+- https://youtu.be/0CRmLNF-IhA (Brian McKenna)
 - http://book.realworldhaskell.org/read/profiling-and-optimization.html
 - https://www.well-typed.com/blog/2014/05/understanding-the-stack/
